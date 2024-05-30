@@ -2,7 +2,7 @@ const input = require("readline-sync");
 
 function averageAge(person1Age, person2Age) {
   const totalAge = person1Age + person2Age;
-  const average = totalAge / 2; // באג 1: חישוב לא נכון של ממוצע
+  const average = totalAge / 2;
   return average;
 }
 
