@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Web Shop - Server Side",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Harel Chen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
