@@ -5,9 +5,6 @@ const products = [
     { id: 1, image: 'https://via.placeholder.com/150', name: 'Sample Product 1', price: 299.9888889 },
     { id: 2, image: 'https://via.placeholder.com/150', name: 'Sample Product 2', price: 19.99 },
     { id: 3, image: 'https://via.placeholder.com/150', name: 'Sample Product 3', price: 39.99 },
-    { id: 4, image: 'https://via.placeholder.com/150', name: 'Sample Product 1', price: 299.9888889 },
-    { id: 5, image: 'https://via.placeholder.com/150', name: 'Sample Product 2', price: 19.99 },
-    { id: 6, image: 'https://via.placeholder.com/150', name: 'Sample Product 3', price: 39.99 },
 ];
 
 export default function Products() {
