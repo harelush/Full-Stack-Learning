@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
+import ReviewList from '../components/Review/ReviewList';
+import ReviewForm from '../components/Review/ReviewForm';
 
 const Reviews = () => {
 
@@ -40,7 +42,6 @@ const Reviews = () => {
                     content: '',
                 }
             );
-
         }
     }
 
@@ -48,51 +49,14 @@ const Reviews = () => {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Product Reviews</h1>
-
-            <div className={styles.reviewList}>
-                {
-                    reviews.map((review) => {
-                        return (
-
-                            <div key={review.id} className={styles.reviewCard}>
-                                <h3 className={styles.reviewerName}>{review.reviewerName}</h3>
-                                <p className={styles.reviewContent}>{review.content}</p>
-                            </div>
-
-                        )
-                    })
-                }
-            </div>
-
-            <form className={styles.reviewForm} onSubmit={handleSendNewReview}>
-                <input
-                    type="text"
-                    name="reviewerName"
-                    placeholder="Your Name"
-                    className={styles.input}
-                    value={newReview.reviewerName}
-                    onChange={handleNewReviewNameChange}
-                    required
-                />
-
-                <textarea
-                    name="content"
-                    placeholder="Write your review here..."
-                    className={styles.textarea}
-                    value={newReview.content}
-                    onChange={handleNewReviewNameChange}
-                    required
-                />
-
-                <button
-                    type="submit"
-                    className={styles.button}
-                >
-                    Send Review
-                </button>
-            </form>
-
-
+            <ReviewList 
+                reviews={reviews}
+            />
+            <ReviewForm 
+                newReview={newReview}
+                handleNewReviewNameChange={handleNewReviewNameChange}
+                handleSendNewReview={handleSendNewReview}
+            />
         </div>
     );
 }
