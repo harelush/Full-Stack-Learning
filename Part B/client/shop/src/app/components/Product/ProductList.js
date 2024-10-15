@@ -7,9 +7,11 @@ const ProductList = ({ products }) => {
             {
                 products.map((product) => {
                     return (
-                        <Link href={`/products/${product.id}`} passHref >
+                        <Link
+                            key={product.id}
+                            href={`/products/${product.id}`}
+                            passHref >
                             <ProductCard
-                                key={product.id}
                                 image={product.image}
                                 name={product.name}
                                 price={product.price}
