@@ -1,7 +1,11 @@
+'use client';
+
 import { notFound } from 'next/navigation'
 import styles from './page.module.css'
+import { useSetAtom } from 'jotai';
+import { cartAtom } from '../../store/CartAtom';
 
-async function getProduct(id) {
+function getProduct(id) {
     const products = [
         { id: 1, image: 'https://via.placeholder.com/500', name: 'Sample Product 1', price: 29.99, description: 'This is the first sample product.' },
         { id: 2, image: 'https://via.placeholder.com/500', name: 'Sample Product 2', price: 19.99, description: 'This is the second sample product.' },
@@ -12,13 +16,24 @@ async function getProduct(id) {
 }
 
 
-export default async function ProductDetails({ params }) {
+export default function ProductDetails({ params }) {
     const { id } = params;
-    const product = await getProduct(id);
+    const product = getProduct(id);
 
     if (!product) {
         notFound();
     }
+
+    const setCartItems = useSetAtom(cartAtom);
+
+    const handleAddToCart = () => {
+        setCartItems(
+            (prevItems) => {
+                return [...prevItems, { ...product }]
+            }
+        );
+    };
+
 
     return (
         <main className={styles.container}>
@@ -39,7 +54,7 @@ export default async function ProductDetails({ params }) {
                 <hr className={styles.divider} />
                 <section className={styles.bottomSection}>
                     <p className={styles.price}>Price: ${product.price.toFixed(2)}</p>
-                    <button className={styles.button}>Add to Cart</button>
+                    <button className={styles.button} onClick={handleAddToCart}>Add to Cart</button>
                 </section>
             </article>
         </main>
