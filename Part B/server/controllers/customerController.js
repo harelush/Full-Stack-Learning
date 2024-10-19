@@ -1,7 +1,6 @@
 const customerModel = require('../models/customerModel');
 
 const getAllCustomers = async (req, res) => {
-    customers.getById()
     const customers = await customerModel.getAllCustomers();
     res.json(customers);
 }
