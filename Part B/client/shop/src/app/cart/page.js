@@ -33,7 +33,7 @@ const Cart = () => {
                             key={item.id}
                             className={styles.cartItem}>
                             <span className={styles.itemName}>{item.name}</span>
-                            <span className={styles.itemPrice}>${item.price.toFixed(2)}</span>
+                            <span className={styles.itemPrice}>${`${item.price.toFixed(2)}`}</span>
                         </li>
                     ))
                 }
@@ -41,7 +41,7 @@ const Cart = () => {
 
             <div className={styles.total}>
                 <span>Total:</span>
-                <span className={styles.totalPrice}>${totalPrice.toFixed(2)}</span>
+                <span className={styles.totalPrice}>${totalPrice}</span>
             </div>
 
             <div className={styles.actions}>

@@ -9,7 +9,7 @@ const ProductCard = ({ id, image, name, price, onClick }) => {
                 passHref >
                 <img src={image} alt={name} className={styles.image} />
                 <h2 className={styles.name}>{name}</h2>
-                <p className={styles.price}>${price.toFixed(2)}</p>
+                <p className={styles.price}>${`${price}`}</p>
             </Link>
 
             <button className={styles.button} onClick={onClick}>
