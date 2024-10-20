@@ -1,21 +1,43 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import ReviewList from '../components/Review/ReviewList';
 import ReviewForm from '../components/Review/ReviewForm';
 
 const Reviews = () => {
 
-    const [reviews, setReviews] = useState([
-        { id: 1, reviewerName: 'John Doe', content: 'Great product! Highly recommended.' },
-        { id: 2, reviewerName: 'Jane Smith', content: 'Works well, but could use some improvements.' },
-    ]);
+    const [reviews, setReviews] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const [newReview, setNewReview] = useState({
         reviewerName: '',
         content: '',
     });
+
+    
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/reviews');
+
+                if(!response.ok) {
+                    throw new Error('Failed to fetch reviews');
+                }
+
+                const data = await response.json();
+                setReviews(data);
+            } catch (e) {
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchReviews();
+     }
+    , []);
 
     const handleNewReviewNameChange = (event) => {
         const { name, value } = event.target;
@@ -49,6 +71,15 @@ const Reviews = () => {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Product Reviews</h1>
+
+            {
+                loading && <p>Loading...</p>
+            }
+
+            {
+                error && <p>{error}</p>
+            }
+
             <ReviewList 
                 reviews={reviews}
             />
