@@ -4,14 +4,36 @@ import styles from './page.module.css'
 import ProductList from '../components/Product/ProductList';
 import { useSetAtom } from 'jotai';
 import { cartAtom } from '../store/CartAtom';
+import { useState, useEffect } from 'react';
 
-const products = [
-    { id: 1, image: 'https://via.placeholder.com/150', name: 'Sample Product 1', price: 299.9888889 },
-    { id: 2, image: 'https://via.placeholder.com/150', name: 'Sample Product 2', price: 19.99 },
-    { id: 3, image: 'https://via.placeholder.com/150', name: 'Sample Product 3', price: 39.99 },
-];
 
 export default function Products() {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/products');
+
+                if(!response.ok) {
+                    throw new Error('Failed to fetch products');
+                }
+
+                const data = await response.json();
+                setProducts(data);
+            } catch (e) {
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+     }
+    , []);
+
 
     const setCartItems = useSetAtom(cartAtom);
 
@@ -26,6 +48,15 @@ export default function Products() {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Product List</h1>
+
+            {
+                loading && <p>Loading...</p>
+            }
+
+            {
+                error && <p>{error}</p>
+            }
+
             <ProductList
                 products={products}
                 onProductAddClicked={handleAddToCart}
