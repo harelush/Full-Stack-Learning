@@ -13,15 +13,16 @@ const createReview = async (req, res) => {
 }
 
 const getAllReviews = async (req, res) => {
-    try {
-        const reviews =  await reviewModel.getAllReviews();
-        
-        res.json(reviews);
-    } catch(error) {
-        res.status(500).json({error: 'Error getting all reviews'});
-    }
-}
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
+    try {
+        const reviews = await reviewModel.getAllReviews(page, limit);
+        res.json(reviews);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching reviews' });
+    }
+};
 
 module.exports = { 
     createReview,
