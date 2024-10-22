@@ -78,20 +78,36 @@ const Reviews = () => {
         })
     };
 
-    const handleSendNewReview = (event) => {
+    const handleSendNewReview = async (event) => {
         event.preventDefault();
 
         if (newReview.reviewerName && newReview.content) {
-            setReviews(prevReviews => {
-                return [...prevReviews, { ...newReview }]
-            });
+            try {
+                const response = await fetch('http://localhost:8080/api/reviews', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newReview),
+                });
 
-            setNewReview(
-                {
-                    reviewerName: '',
-                    content: '',
+                if(!response.ok) {
+                    throw new Error('Failed to send review');
                 }
-            );
+
+                setReviews(prevReviews => {
+                    return [...prevReviews, { ...newReview }]
+                });
+    
+                setNewReview(
+                    {
+                        reviewerName: '',
+                        content: '',
+                    }
+                );
+            } catch(e) {
+                alert('Failed to send review,please try again later');
+            }
         }
     }
 
