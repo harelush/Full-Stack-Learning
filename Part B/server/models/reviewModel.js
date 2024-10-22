@@ -9,8 +9,11 @@ const reviewSchema = new mongoose.Schema({
 
 const Review = mongoose.model('Review', reviewSchema);
 
-async function getAllReviews() {
-    return await Review.find();
+async function getAllReviews(page = 1, limit = 5) {
+    const skip = (page - 1) * limit;
+    const reviews = await Review.find().skip(skip).limit(limit);
+    
+    return reviews;
 }
 
 async function createReview(review) {

@@ -13,8 +13,11 @@ const createReview = async (req, res) => {
 }
 
 const getAllReviews = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+
     try {
-        const reviews =  await reviewModel.getAllReviews();
+        const reviews =  await reviewModel.getAllReviews(page, limit);
         
         res.json(reviews);
     } catch(error) {

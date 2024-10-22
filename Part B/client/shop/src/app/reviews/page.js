@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './page.module.css';
 import ReviewList from '../components/Review/ReviewList';
 import ReviewForm from '../components/Review/ReviewForm';
@@ -10,24 +10,32 @@ const Reviews = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [page, setPage] = useState(1);
+    const [fetching, setFetching] = useState(false);
     const [newReview, setNewReview] = useState({
         reviewerName: '',
         content: '',
     });
 
+    const reviewsContainerRef = useRef(null);
+
     
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/reviews');
+                const response = await fetch(`http://localhost:8080/api/reviews?page=${page}&limit=5`);
 
                 if(!response.ok) {
                     throw new Error('Failed to fetch reviews');
                 }
 
                 const data = await response.json();
-                setReviews(data);
+                setReviews((prevReviews) => [...prevReviews, ...data]);
+
+
+                if(data.length === 0) {
+                    setFetching(false);
+                }
             } catch (e) {
                 setError(e.message);
             } finally {
@@ -37,7 +45,27 @@ const Reviews = () => {
 
         fetchReviews();
      }
-    , []);
+    , [page]);
+
+
+    useEffect(() => {
+        const container = reviewsContainerRef.current;
+        container.addEventListener('scroll', handleScroll);
+
+        return () => {
+            container.removeEventListener('scroll', handleScroll);
+        };
+
+    }, [loading, fetching]);
+
+    const handleScroll = () => {
+        if (reviewsContainerRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = reviewsContainerRef.current;
+            if (scrollTop + clientHeight >= scrollHeight - 5 && !fetching && !loading) {
+                setPage((prevPage) => prevPage + 1); // Fetch the next page
+            }
+        }
+    };
 
     const handleNewReviewNameChange = (event) => {
         const { name, value } = event.target;
@@ -82,6 +110,7 @@ const Reviews = () => {
 
             <ReviewList 
                 reviews={reviews}
+                reviewsContainerRef={reviewsContainerRef}
             />
             <ReviewForm 
                 newReview={newReview}
